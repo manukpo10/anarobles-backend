@@ -1,0 +1,8 @@
+.git
+node_modules
+maqueta
+anarobles-frontend
+target
+*.md
+*.yml
+Dockerfile
