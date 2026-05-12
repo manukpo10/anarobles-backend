@@ -30,6 +30,7 @@ public class InscripcionService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Transactional(readOnly = true)
     public List<InscripcionResponse> listarPorUsuario(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -37,6 +38,7 @@ public class InscripcionService {
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public boolean estaInscripto(String email, Long cursoId) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

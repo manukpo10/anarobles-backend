@@ -59,6 +59,7 @@ public class OrdenService {
         return ordenRepository.save(orden);
     }
 
+    @Transactional(readOnly = true)
     public List<OrdenResponse> listarPorUsuario(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -66,6 +67,7 @@ public class OrdenService {
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public OrdenResponse obtenerPorExternalReference(String externalReference) {
         return ordenRepository.findByExternalReference(externalReference)
                 .map(this::toResponse)
