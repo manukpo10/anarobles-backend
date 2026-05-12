@@ -88,6 +88,14 @@ public class MercadoPagoService {
 
         if (resp.statusCode() >= 300) {
             log.error("MP preferences error {}: {}", resp.statusCode(), resp.body());
+            // Si el token es inválido (403) o MP no responde, caer al modo demo
+            if (resp.statusCode() == 403 || resp.statusCode() == 401) {
+                log.warn("MP token inválido o denegado ({}), usando modo demo", resp.statusCode());
+                return new PreferenciaResultado(null,
+                        siteUrl + "/checkout/success?order=" + orden.getExternalReference() + "&demo=true",
+                        siteUrl + "/checkout/success?order=" + orden.getExternalReference() + "&demo=true",
+                        true);
+            }
             throw new RuntimeException("Error de Mercado Pago: " + resp.statusCode());
         }
 
