@@ -17,5 +17,6 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
     List<Inscripcion> findByUsuarioWithCurso(@Param("usuario") Usuario usuario);
     Optional<Inscripcion> findByUsuarioAndCurso(Usuario usuario, Curso curso);
     boolean existsByUsuarioAndCurso(Usuario usuario, Curso curso);
-    boolean existsByUsuarioIdAndCursoId(Long usuarioId, Long cursoId);
+    @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM Inscripcion i WHERE i.usuario.id = :usuarioId AND i.curso.id = :cursoId")
+    boolean existsByUsuarioIdAndCursoId(@Param("usuarioId") Long usuarioId, @Param("cursoId") Long cursoId);
 }

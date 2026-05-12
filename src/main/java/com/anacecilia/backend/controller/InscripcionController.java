@@ -27,6 +27,12 @@ public class InscripcionController {
         return ResponseEntity.ok(Map.of("inscripto", inscripto));
     }
 
+    @PostMapping("/cursos/{id}/inscripcion")
+    public ResponseEntity<Void> inscribir(@PathVariable Long id, Authentication auth) {
+        inscripcionService.inscribir(auth.getName(), id);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/cursos/{id}/lecciones/{leccionId}/completar")
     public ResponseEntity<InscripcionResponse> completarLeccion(
             @PathVariable Long id,

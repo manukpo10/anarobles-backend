@@ -88,7 +88,7 @@ public class OrdenService {
         for (OrdenItem item : orden.getItems()) {
             if (item.getTipo() == OrdenItem.Tipo.CURSO) {
                 cursoRepository.findById(item.getReferenciaId()).ifPresent(curso ->
-                        inscripcionService.inscribir(orden.getUsuario(), curso));
+                        inscripcionService.inscribir(orden.getUsuario().getEmail(), curso.getId()));
             }
         }
         log.info("Orden {} marcada como PAGADA, inscripciones generadas", orden.getId());

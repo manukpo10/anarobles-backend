@@ -47,10 +47,14 @@ public class InscripcionService {
     }
 
     @Transactional
-    public Inscripcion inscribir(Usuario usuario, Curso curso) {
-        return inscripcionRepository.findByUsuarioAndCurso(usuario, curso)
-                .orElseGet(() -> inscripcionRepository.save(
-                        Inscripcion.builder().usuario(usuario).curso(curso).build()));
+    public void inscribir(String email, Long cursoId) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Curso curso = cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+        if (!inscripcionRepository.existsByUsuarioAndCurso(usuario, curso)) {
+            inscripcionRepository.save(Inscripcion.builder().usuario(usuario).curso(curso).build());
+        }
     }
 
     @Transactional
