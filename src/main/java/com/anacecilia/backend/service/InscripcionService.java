@@ -34,17 +34,16 @@ public class InscripcionService {
     public List<InscripcionResponse> listarPorUsuario(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return inscripcionRepository.findByUsuario(usuario)
+        return inscripcionRepository.findByUsuarioWithCurso(usuario)
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public boolean estaInscripto(String email, Long cursoId) {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Curso curso = cursoRepository.findById(cursoId)
-                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-        return inscripcionRepository.existsByUsuarioAndCurso(usuario, curso);
+        Long usuarioId = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
+                .getId();
+        return inscripcionRepository.existsByUsuarioIdAndCursoId(usuarioId, cursoId);
     }
 
     @Transactional
